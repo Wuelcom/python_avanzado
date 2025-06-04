@@ -2,13 +2,10 @@ from .database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 
 #Crear la clase de modelo(Entidad)
-class objetivos (Base):
+class objetivo(Base):
     __tablename__ = "objetivos"
-    id_objetivo = Column(Integer, 
-                primary_key=True,
-                )
+    id_objetivo = Column(Integer, primary_key=True)
     descripcion = Column(String(100), nullable=False, unique=True)
-    
 
 class usuarios (Base):
     __tablename__ = "usuarios"
@@ -33,7 +30,7 @@ class poblacion (Base):
     poblacion = Column(String(50)) # e.g., "hombres", "mujeres"
     
 class usuarios_comentarios (Base):
-    __tablename__ = "usuarios"
+    __tablename__ = "usuarios_comentarios"
     id_usuario = Column(Integer, 
                 primary_key=True,
                 )
@@ -41,8 +38,17 @@ class usuarios_comentarios (Base):
     id_publicacion = Column(Integer, ForeignKey("publicaciones.id_publicacion"))
     comentario = Column(String(200))
 
-class rol_usuario (Base):
-    __tablename__ = "rol_usuario"
+class Comentario(Base):
+    __tablename__ = "comentarios"
+    id_comentario = Column(Integer, primary_key=True)
+    id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"))
+    id_publicacion = Column(Integer, ForeignKey("publicaciones.id_publicacion"))
+    contenido = Column(String(500))
+    fecha = Column(String(20))
+
+
+class rol_usuarios (Base):
+    __tablename__ = "rol_usuarios"
     id_rol = Column(Integer, 
                 primary_key=True,
                 )
@@ -51,11 +57,8 @@ class rol_usuario (Base):
 
 class usuario_rutina (Base):
     __tablename__ = "usuario_rutina"
-    id_rol = Column(Integer, 
-                primary_key=True,
-                )
-    id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"))
-    id_rol = Column(Integer, ForeignKey("rol_usuario.id_rol"))
+    id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"), primary_key=True)
+    id_rol = Column(Integer, ForeignKey("rol_usuarios.id_rol"), primary_key=True)
 
 class rutinas (Base):
     __tablename__ = "rutinas"
@@ -67,10 +70,11 @@ class rutinas (Base):
     nivel = Column(String(100)) # e.g., "Principiante", "Intermedio", "Avanzado"
     duracion_minutos = Column(String(15)) 
     descripcion = Column(String(200))
-    fecha_registro = Column(String(20))  
+    fecha_inicio = Column(String(20))  
+    fecha_fin = Column(String(20))
     creador_id = Column(Integer, ForeignKey("usuarios.id_usuario"))
 
-class ejercicio (Base):
+class ejercicios (Base):
     __tablename__ = "ejercicio"
     id_ejercicio = Column(Integer, 
                 primary_key=True,
@@ -78,6 +82,9 @@ class ejercicio (Base):
     nombre = Column(String(50))
     descripcion = Column(String(200))
     video_url = Column(String(200))
+    duracion_minutos = Column(String(15))
+    id_rutina = Column(Integer, ForeignKey("rutinas.id_rutinas"))
+
 
 class planes_dieta (Base):
     __tablename__ = "planes_dieta"
@@ -90,20 +97,17 @@ class planes_dieta (Base):
     tipo_dieta = Column(String(50)) # e.g., "Vegetariana", "Vegana", "Omnívora"
     creador_id = Column(Integer, ForeignKey("usuarios.id_usuario"))
 
-class progreso_usuario  (Base):
-    __tablename__ = "progreso_usuario"
-    id_progreso   = Column(Integer, 
-                primary_key=True,
-                )
-    id_usuario   = Column(String(200))
+class progreso_usuario(Base):
+    __tablename__ = "progreso_usuarios"
+    id_progreso = Column(Integer, primary_key=True)
     fecha_registro = Column(String(20))
     peso_actual = Column(Integer)
     grasa_corporal = Column(Integer)
     masa_muscular = Column(Integer)
-    observaciones = Column(String(200)) 
+    observaciones = Column(String(200))
     imagen_url = Column(String(200))
     id_usuario = Column(Integer, ForeignKey("usuarios.id_usuario"))
-    
+
 class publicaciones(Base):
     __tablename__ = "publicaciones"
     id_publicacion = Column(Integer, primary_key=True)
@@ -112,6 +116,29 @@ class publicaciones(Base):
     imagen_url = Column(String(200))
     fecha_publicacion = Column(String(20))
 
+class logros (Base):
+    __tablename__ = "logros"
+    id_logros   = Column(Integer, 
+                primary_key=True,
+                )
+    id_usuario   = Column(Integer, ForeignKey("usuarios.id_usuario"))
+    id_ejecucion   = Column(Integer, ForeignKey("ejecucion_rutina.id_ejecucion"))
+    nombre_logro = Column(String(100))
+    descripcion = Column(String(200))
+    fecha_logro = Column(String(20))
+    numero_serie = Column(Integer)
+    numero_repeticiones = Column(Integer)
+    peso_utilizado = Column(Integer)
 
+class ejecucion_rutina (Base):
+    __tablename__ = "ejecucion_rutina"
+    id_ejecucion   = Column(Integer, 
+                primary_key=True,
+                )
+    numero_serie = Column(Integer)
+    numero_repeticiones = Column(Integer)
+    peso_utilizado = Column(Integer)
+    id_ejercicio = Column(Integer, ForeignKey("ejercicio.id_ejercicio"))
+    id_rutina = Column(Integer, ForeignKey("rutinas.id_rutinas"))
 
    

@@ -12,7 +12,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from db.database import Base, MARIADB_URL
-from db.models import objetivos, usuarios, poblacion, usuarios_comentarios, rol_usuario, usuario_rutina, rutinas, ejercicios, publicaciones, comentarios, rutinas_ejercicios 
+from db.models import objetivo, usuarios, poblacion, usuarios_comentarios, rol_usuarios, usuario_rutina, rutinas, ejercicios, planes_dieta, progreso_usuario, publicaciones, logros, ejecucion_rutina
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
