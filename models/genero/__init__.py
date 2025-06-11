@@ -1,0 +1,1 @@
+from .tipo_genero import tipo_genero 
